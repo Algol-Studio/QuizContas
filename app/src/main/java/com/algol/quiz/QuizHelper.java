@@ -25,8 +25,6 @@ public class QuizHelper extends SQLiteOpenHelper {
     private SQLiteDatabase dbase;
     public QuizHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        //dbase = this.getReadableDatabase();
-        //onCreate(dbase);
     }
     @Override
     public void onCreate(SQLiteDatabase db) {

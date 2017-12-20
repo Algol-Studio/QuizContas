@@ -42,13 +42,50 @@ public class QuizHelper extends SQLiteOpenHelper {
     private void addQuestion() {
         for (int i=0;i<20;i++){
             Random rand = new Random();
-            int a = rand.nextInt(10);
-            int b = rand.nextInt(10);
-            String question = Integer.toString(a)+"+"+Integer.toString(b)+" = ?";
-            List<Integer> answer = randInt(a+b);
-            Question q = new Question(question,Integer.toString(a+b+answer.get(0)),Integer.toString(a+b+answer.get(1)),Integer.toString(a+b+answer.get(2)),Integer.toString(a+b));
+            int a = rand.nextInt(9)+1;
+            int b = rand.nextInt(9)+1;
+            int c = rand.nextInt(4);
+            Question q;
+            switch (c){
+                case 0: q = sum(a,b);
+                break;
+                case 1: q = subtraction(a,b);
+                break;
+                case 2: q = multiplication(a,b);
+                break;
+                default: q = division(a,b);
+                break;
+            }
             this.addQuestion(q);
         }
+    }
+
+    public Question sum(int a, int b){
+        String question = Integer.toString(a)+"+"+Integer.toString(b)+" = ?";
+        List<Integer> answer = randInt(a+b);
+        Question q = new Question(question,Integer.toString(a+b+answer.get(0)),Integer.toString(a+b+answer.get(1)),Integer.toString(a+b+answer.get(2)),Integer.toString(a+b));
+      return q;
+    }
+
+    public Question subtraction(int a, int b){
+        String question = Integer.toString(a)+"-"+Integer.toString(b)+" = ?";
+        List<Integer> answer = randInt(a-b);
+        Question q = new Question(question,Integer.toString(a-b+answer.get(0)),Integer.toString(a-b+answer.get(1)),Integer.toString(a-b+answer.get(2)),Integer.toString(a-b));
+        return q;
+    }
+
+    public Question multiplication(int a, int b){
+        String question = Integer.toString(a)+"x"+Integer.toString(b)+" = ?";
+        List<Integer> answer = randInt(a*b);
+        Question q = new Question(question,Integer.toString(a*b+answer.get(0)),Integer.toString(a*b+answer.get(1)),Integer.toString(a*b+answer.get(2)),Integer.toString(a*b));
+        return q;
+    }
+
+    public Question division(int a, int b){
+        String question = Integer.toString(a*b)+"/"+Integer.toString(a)+" = ?";
+        List<Integer> answer = randInt(b);
+        Question q = new Question(question,Integer.toString(b+answer.get(0)),Integer.toString(b+answer.get(1)),Integer.toString(b+answer.get(2)),Integer.toString(b));
+        return q;
     }
 
     @Override

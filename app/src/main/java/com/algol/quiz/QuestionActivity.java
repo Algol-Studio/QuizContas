@@ -22,7 +22,7 @@ public class QuestionActivity extends Activity {
     int qid = 0;
     Question currentQ;
     TextView txtQuestion, times, scored;
-    Button button1, button2, button3;
+    Button button1, button2, button3, button4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +37,7 @@ public class QuestionActivity extends Activity {
         button1 = (Button) findViewById(R.id.button1);
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
+        button4 = (Button) findViewById(R.id.button4);
         // the textview in which score will be displayed
         scored = (TextView) findViewById(R.id.score);
         // the timer
@@ -67,6 +68,12 @@ public class QuestionActivity extends Activity {
             @Override
             public void onClick(View v) {
                 getAnswer(button3.getText().toString());
+            }
+        });
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAnswer(button4.getText().toString());
             }
         });
     }
@@ -136,6 +143,7 @@ public class QuestionActivity extends Activity {
         button1.setText(currentQ.getOPTA());
         button2.setText(currentQ.getOPTB());
         button3.setText(currentQ.getOPTC());
+        button4.setText(currentQ.getOPTD());
         qid++;
     }
 }

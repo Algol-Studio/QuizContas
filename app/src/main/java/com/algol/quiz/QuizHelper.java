@@ -24,8 +24,9 @@ public class QuizHelper extends SQLiteOpenHelper {
     private static final String KEY_OPTA = "opta"; // option a
     private static final String KEY_OPTB = "optb"; // option b
     private static final String KEY_OPTC = "optc"; // option c
+    private static final String KEY_OPTD = "optd"; // option d
     private SQLiteDatabase dbase;
-    public QuizHelper(Context context) {
+    QuizHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
     @Override
@@ -34,7 +35,7 @@ public class QuizHelper extends SQLiteOpenHelper {
         String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_QUEST + " ( "
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + KEY_QUES
                 + " TEXT, " + KEY_ANSWER + " TEXT, " + KEY_OPTA + " TEXT, "
-                + KEY_OPTB + " TEXT, " + KEY_OPTC + " TEXT)";
+                + KEY_OPTB + " TEXT, " + KEY_OPTC + " TEXT, " + KEY_OPTD + " TEXT)";
         db.execSQL(sql);
         addQuestion();
         //db.close();
@@ -60,32 +61,28 @@ public class QuizHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Question sum(int a, int b){
+    private Question sum(int a, int b){
         String question = Integer.toString(a)+"+"+Integer.toString(b)+" = ?";
         List<Integer> answer = randInt(a+b);
-        Question q = new Question(question,Integer.toString(a+b+answer.get(0)),Integer.toString(a+b+answer.get(1)),Integer.toString(a+b+answer.get(2)),Integer.toString(a+b));
-      return q;
+        return new Question(question,Integer.toString(a+b+answer.get(0)),Integer.toString(a+b+answer.get(1)),Integer.toString(a+b+answer.get(2)),Integer.toString(a+b+answer.get(3)),Integer.toString(a+b));
     }
 
-    public Question subtraction(int a, int b){
+    private Question subtraction(int a, int b){
         String question = Integer.toString(a)+"-"+Integer.toString(b)+" = ?";
         List<Integer> answer = randInt(a-b);
-        Question q = new Question(question,Integer.toString(a-b+answer.get(0)),Integer.toString(a-b+answer.get(1)),Integer.toString(a-b+answer.get(2)),Integer.toString(a-b));
-        return q;
+        return new Question(question,Integer.toString(a-b+answer.get(0)),Integer.toString(a-b+answer.get(1)),Integer.toString(a-b+answer.get(2)),Integer.toString(a-b+answer.get(3)),Integer.toString(a-b));
     }
 
-    public Question multiplication(int a, int b){
+    private Question multiplication(int a, int b){
         String question = Integer.toString(a)+"x"+Integer.toString(b)+" = ?";
         List<Integer> answer = randInt(a*b);
-        Question q = new Question(question,Integer.toString(a*b+answer.get(0)),Integer.toString(a*b+answer.get(1)),Integer.toString(a*b+answer.get(2)),Integer.toString(a*b));
-        return q;
+        return new Question(question,Integer.toString(a*b+answer.get(0)),Integer.toString(a*b+answer.get(1)),Integer.toString(a*b+answer.get(2)),Integer.toString(a*b+answer.get(3)),Integer.toString(a*b));
     }
 
-    public Question division(int a, int b){
+    private Question division(int a, int b){
         String question = Integer.toString(a*b)+"/"+Integer.toString(a)+" = ?";
         List<Integer> answer = randInt(b);
-        Question q = new Question(question,Integer.toString(b+answer.get(0)),Integer.toString(b+answer.get(1)),Integer.toString(b+answer.get(2)),Integer.toString(b));
-        return q;
+        return new Question(question,Integer.toString(b+answer.get(0)),Integer.toString(b+answer.get(1)),Integer.toString(b+answer.get(2)),Integer.toString(b+answer.get(3)),Integer.toString(b));
     }
 
     @Override
@@ -96,7 +93,7 @@ public class QuizHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
     // Adding new question
-    public void addQuestion(Question quest) {
+    private void addQuestion(Question quest) {
         // SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_QUES, quest.getQUESTION());
@@ -104,10 +101,11 @@ public class QuizHelper extends SQLiteOpenHelper {
         values.put(KEY_OPTA, quest.getOPTA());
         values.put(KEY_OPTB, quest.getOPTB());
         values.put(KEY_OPTC, quest.getOPTC());
+        values.put(KEY_OPTD, quest.getOPTD());
         // Inserting Row
         dbase.insert(TABLE_QUEST, null, values);
     }
-    public List<Question> getAllQuestions() {
+    List<Question> getAllQuestions() {
         List<Question> quesList = new ArrayList<Question>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_QUEST;
@@ -125,6 +123,7 @@ public class QuizHelper extends SQLiteOpenHelper {
                 quest.setOPTA(cursor.getString(3));
                 quest.setOPTB(cursor.getString(4));
                 quest.setOPTC(cursor.getString(5));
+                quest.setOPTD(cursor.getString(6));
                 quesList.add(quest);
             } while (cursor.moveToNext());
         }
@@ -132,15 +131,14 @@ public class QuizHelper extends SQLiteOpenHelper {
         return quesList;
     }
 
-    public List<Integer> randInt(int Answer){
+    private List<Integer> randInt(int Answer){
         List<Integer> answerList = new ArrayList<>();
         answerList.add(0);
         Integer variance = Math.max(5,Answer/10);
-        while (answerList.size()<3){
+        while (answerList.size()<4){
             Integer rand = -1*variance+(int)(Math.random()*2*(variance+0.5));
             if(answerList.indexOf(rand)==-1){
                 answerList.add(rand);
-                int x =1;
             }
         }
         Collections.shuffle(answerList);

@@ -46,7 +46,7 @@ public class QuestionActivity extends Activity {
         setQuestionView();
         times.setText("00:02:00");
         // A timer of 60 seconds to play for, with an interval of 1 second (1000 milliseconds)
-        CounterClass timer = new CounterClass(60000, 1000);
+        CounterClass timer = new CounterClass(1000000, 1000);
         timer.start();
         // button click listeners
         button1.setOnClickListener(new View.OnClickListener() {
@@ -112,27 +112,26 @@ public class QuestionActivity extends Activity {
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @SuppressLint("NewApi")
     public class CounterClass extends CountDownTimer {
-        public CounterClass(long millisInFuture, long countDownInterval) {
+        CounterClass(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
             // TODO Auto-generated constructor stub
         }
         @Override
         public void onFinish() {
-            times.setText("Time is up");
+            times.setText("00:00");
         }
         @Override
         public void onTick(long millisUntilFinished) {
             // TODO Auto-generated method stub
-            long millis = millisUntilFinished;
-            String hms = String.format(
+            @SuppressLint("DefaultLocale") String hms = String.format(
                     "%02d:%02d:%02d",
-                    TimeUnit.MILLISECONDS.toHours(millis),
-                    TimeUnit.MILLISECONDS.toMinutes(millis)
+                    TimeUnit.MILLISECONDS.toHours(1000000-millisUntilFinished),
+                    TimeUnit.MILLISECONDS.toMinutes(1000000-millisUntilFinished)
                             - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS
-                            .toHours(millis)),
-                    TimeUnit.MILLISECONDS.toSeconds(millis)
+                            .toHours(1000000-millisUntilFinished)),
+                    TimeUnit.MILLISECONDS.toSeconds(1000000-millisUntilFinished)
                             - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS
-                            .toMinutes(millis)));
+                            .toMinutes(1000000-millisUntilFinished)));
             System.out.println(hms);
             times.setText(hms);
         }
